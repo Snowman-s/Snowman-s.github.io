@@ -37,7 +37,29 @@ class Player {
     onDraw(){
         push()
         noStroke()
-        square(player.x - player.size / 2, player.y - player.size / 2, player.size)
+        square(this.x - this.size / 2, this.y - this.size / 2, this.size)
+        pop()
+    }
+}
+
+class Bullet {
+    constructor (){
+        this.x = 0
+        this.y = 0
+        this.size = 5
+        this.speed = 4
+        this.angle = 2 * PI
+    }
+
+    move(){
+        this.x += this.speed * cos(this.angle)
+        this.y += this.speed * sin(this.angle)
+    }
+
+    onDraw(){
+        push()
+        noStroke()
+        square(this.x - this.size / 2, this.y - this.size / 2, this.size)
         pop()
     }
 }
@@ -46,6 +68,7 @@ let i = 0
 let player
 
 let keyMap = new Map()
+let bulletList = []
 
 function setup() {
     createCanvas(500, 500)
@@ -53,6 +76,12 @@ function setup() {
     player = new Player()
     player.x = 250
     player.y = 450
+
+    let bullet = new Bullet()
+    bullet.speed = 5
+    bullet.angle = PI / 2
+
+    bulletList.push(bullet)
 
     keyMap.set(UP_ARROW, false)
     keyMap.set(DOWN_ARROW, false)
@@ -64,6 +93,7 @@ function draw() {
     background(0)
 
     player.moveByKey()
+    bulletList.forEach((a, b, c) =>{a.move()})
 
     if(player.x < 0) player.x = 0
     if(player.y < 0) player.y = 0
@@ -71,6 +101,11 @@ function draw() {
     if(player.y > 500) player.y = 500
 
     player.onDraw()
+    bulletList.forEach((a, b, c) =>{a.onDraw()})
+
+    bulletList = bulletList.filter((a, b, c) => {
+        return (a.x > -100 && 600 > a.x) && (a.y > -100 && 600 > a.y)
+    })
 
     i++
 }
