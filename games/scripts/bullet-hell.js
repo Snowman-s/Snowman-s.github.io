@@ -71,22 +71,19 @@ let keyMap = new Map()
 let bulletList = []
 let gameOver = false
 
+let frame = 0
+
 function setup() {
     createCanvas(500, 500)
 
-    player = new Player()
-    player.x = 250
-    player.y = 450
-
-    keyMap.set(UP_ARROW, false)
-    keyMap.set(DOWN_ARROW, false)
-    keyMap.set(LEFT_ARROW, false)
-    keyMap.set(RIGHT_ARROW, false)
+    restart()
 }
 
 function draw() {
     if(!gameOver) doTask()
     render()
+    
+    if(keyMap.get(82)) restart()
 }
 
 function doTask(){
@@ -138,6 +135,23 @@ function render(){
         text('Press \"R\" to Restart', 0, 350, 500)
         pop()
     }
+}
+
+function restart(){
+    player = new Player()
+    player.x = 250
+    player.y = 450
+
+    keyMap.set(UP_ARROW, false)
+    keyMap.set(DOWN_ARROW, false)
+    keyMap.set(LEFT_ARROW, false)
+    keyMap.set(RIGHT_ARROW, false)
+    keyMap.set(82, false)
+
+    gameOver = false
+    frame = 0
+
+    bulletList = []
 }
 
 function keyPressed(){
