@@ -77,12 +77,6 @@ function setup() {
     player.x = 250
     player.y = 450
 
-    let bullet = new Bullet()
-    bullet.speed = 5
-    bullet.angle = PI / 2
-
-    bulletList.push(bullet)
-
     keyMap.set(UP_ARROW, false)
     keyMap.set(DOWN_ARROW, false)
     keyMap.set(LEFT_ARROW, false)
@@ -106,6 +100,15 @@ function draw() {
     bulletList = bulletList.filter((a, b, c) => {
         return (a.x > -100 && 600 > a.x) && (a.y > -100 && 600 > a.y)
     })
+
+    if(frameCount % 60 == 0){
+        for (let angle = 0; angle < TAU; angle+=PI/6) {
+            let bullet = new Bullet()
+            bullet.angle = angle; bullet.speed = 5; bullet.size = 5;
+            bullet.x = bullet.y = 250;
+            bulletList.push(bullet)
+        }
+    }
 
     i++
 }
