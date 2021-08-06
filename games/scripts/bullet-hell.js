@@ -4,6 +4,12 @@ class Player {
         this.y = 0
         this.size = 5
         this.speed = 4
+        this.hitFrame = -1
+        this.hitEffectFrame = 40
+    }
+
+    onTask(){
+        if(!this.isDamaged()) this.moveByKey()
     }
 
     moveByKey(){
@@ -34,11 +40,39 @@ class Player {
         this.y += dy
     }
 
+    hit(){
+        if(this.isDamaged()) return
+
+        this.hitFrame = frame
+    }
+
+    isDamaged(){
+        return this.hitFrame >= 0
+    }
+
+    isDead(){
+        return this.hitFrame >= 0 && this.hitFrame + this.hitEffectFrame < frame
+    }
+
     onDraw(){
         push()
-        fill(255, 0, 0)
         noStroke()
-        square(this.x - this.size / 2, this.y - this.size / 2, this.size)
+        if(! this.isDamaged()){
+            fill(255, 0, 0)
+            square(this.x - this.size / 2, this.y - this.size / 2, this.size)
+        } else {     
+            const effectProgress = (frame - this.hitFrame) / this.hitEffectFrame
+            const radius = effectProgress * this.size * 5;
+               
+            fill(255, 255 * sin(effectProgress * PI))
+            rect(0, 0, width, height)
+            fill(255, 0, 0)
+            for (let angle = 0; angle < TAU; angle += PI/6) {
+                square(this.x - this.size / 2 + radius * cos(angle), 
+                    this.y - this.size / 2 + radius * sin(angle), 
+                    this.size * (1 - effectProgress))
+            }
+        }
         pop()
     }
 }
@@ -69,7 +103,6 @@ let player
 
 let keyMap = new Map()
 let bulletList = []
-let gameOver = false
 
 let frame = 0
 
@@ -80,14 +113,12 @@ function setup() {
 }
 
 function draw() {
-    if(!gameOver) doTask()
+    doTask()
     render()
-    
-    if(keyMap.get(82)) restart()
 }
 
 function doTask(){
-    player.moveByKey()
+    player.onTask()
     bulletList.forEach((a, b, c) =>{a.move()})
 
     if(player.x < 0) player.x = 0
@@ -105,7 +136,7 @@ function doTask(){
     })
 
     if(hitBullet.length > 0){
-        gameOver = true
+        player.hit()
     }
 
     if(frameCount % 60 == 0){
@@ -116,6 +147,10 @@ function doTask(){
             bulletList.push(bullet)
         }
     }
+
+    frame++
+
+    if(player.isDead()) restart()
 }
 
 function render(){
@@ -123,18 +158,6 @@ function render(){
 
     player.onDraw()
     bulletList.forEach((a, b, c) =>{a.onDraw()})
-
-    if (gameOver) {
-        push()
-        fill(255)
-        stroke(255)
-        textAlign(CENTER)
-        textSize(50)
-        text('Game Over!!', 0, 150, 500)
-        textSize(30)
-        text('Press \"R\" to Restart', 0, 350, 500)
-        pop()
-    }
 }
 
 function restart(){
@@ -148,7 +171,6 @@ function restart(){
     keyMap.set(RIGHT_ARROW, false)
     keyMap.set(82, false)
 
-    gameOver = false
     frame = 0
 
     bulletList = []
