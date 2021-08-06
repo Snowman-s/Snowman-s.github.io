@@ -36,6 +36,7 @@ class Player {
 
     onDraw(){
         push()
+        fill(255, 0, 0)
         noStroke()
         square(this.x - this.size / 2, this.y - this.size / 2, this.size)
         pop()
@@ -58,17 +59,17 @@ class Bullet {
 
     onDraw(){
         push()
-        noStroke()
+        noStroke(255)
         square(this.x - this.size / 2, this.y - this.size / 2, this.size)
         pop()
     }
 }
 
-let i = 0
 let player
 
 let keyMap = new Map()
 let bulletList = []
+let gameOver = false
 
 function setup() {
     createCanvas(500, 500)
@@ -84,8 +85,11 @@ function setup() {
 }
 
 function draw() {
-    background(0)
+    if(!gameOver) doTask()
+    render()
+}
 
+function doTask(){
     player.moveByKey()
     bulletList.forEach((a, b, c) =>{a.move()})
 
@@ -94,12 +98,18 @@ function draw() {
     if(player.x > 500) player.x = 500
     if(player.y > 500) player.y = 500
 
-    player.onDraw()
-    bulletList.forEach((a, b, c) =>{a.onDraw()})
-
     bulletList = bulletList.filter((a, b, c) => {
         return (a.x > -100 && 600 > a.x) && (a.y > -100 && 600 > a.y)
     })
+
+    let hitBullet = bulletList.filter((a, b, c) => {
+        let sizeAve = a.size / 2 + player.size / 2
+        return abs(a.x - player.x) < sizeAve && abs(a.y - player.y) < sizeAve
+    })
+
+    if(hitBullet.length > 0){
+        gameOver = true
+    }
 
     if(frameCount % 60 == 0){
         for (let angle = 0; angle < TAU; angle+=PI/6) {
@@ -109,8 +119,25 @@ function draw() {
             bulletList.push(bullet)
         }
     }
+}
 
-    i++
+function render(){
+    background(0)
+
+    player.onDraw()
+    bulletList.forEach((a, b, c) =>{a.onDraw()})
+
+    if (gameOver) {
+        push()
+        fill(255)
+        stroke(255)
+        textAlign(CENTER)
+        textSize(50)
+        text('Game Over!!', 0, 150, 500)
+        textSize(30)
+        text('Press \"R\" to Restart', 0, 350, 500)
+        pop()
+    }
 }
 
 function keyPressed(){
