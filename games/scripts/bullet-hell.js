@@ -1,3 +1,9 @@
+const stgAreaWidth = 500
+const stgAreaHeight = 500
+
+const bulletLiveWidthMargin = 100
+const bulletLiveHeightMargin = 100
+
 class Player {
     constructor (){
         this.x = 0
@@ -189,11 +195,12 @@ function doTask(){
 
     if(player.x < 0) player.x = 0
     if(player.y < 0) player.y = 0
-    if(player.x > 500) player.x = 500
-    if(player.y > 500) player.y = 500
+    if(player.x > stgAreaWidth) player.x = stgAreaWidth
+    if(player.y > stgAreaHeight) player.y = stgAreaHeight
 
     bulletList = bulletList.filter((a, b, c) => {
-        return (a.x > -100 && 600 > a.x) && (a.y > -100 && 600 > a.y)
+        return (a.x > -bulletLiveWidthMargin && (stgAreaWidth + bulletLiveWidthMargin) > a.x) &&
+                (a.y > -bulletLiveHeightMargin && (stgAreaHeight + bulletLiveHeightMargin) > a.y)
     })
 
     let hitBullet = bulletList.filter((a, b, c) => {
@@ -209,7 +216,8 @@ function doTask(){
         for (let angle = 0; angle < TAU; angle+=PI/6) {
             let bullet = new Bullet()
             bullet.angle = angle; bullet.speed = 5; bullet.size = 5;
-            bullet.x = bullet.y = 250;
+            bullet.x = stgAreaWidth / 2 
+            bullet.y = stgAreaHeight / 2
             bulletList.push(bullet)
         }
     }
@@ -232,8 +240,8 @@ function render(){
 
 function restart(){
     player = new Player()
-    player.x = 250
-    player.y = 450
+    player.x = stgAreaWidth / 2
+    player.y = stgAreaHeight * 9 / 10
 
     keyMap.set(UP_ARROW, false)
     keyMap.set(DOWN_ARROW, false)
