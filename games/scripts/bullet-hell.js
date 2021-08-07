@@ -61,11 +61,9 @@ class Player {
             fill(255, 0, 0)
             square(this.x - this.size / 2, this.y - this.size / 2, this.size)
         } else {     
-            const effectProgress = (frame - this.hitFrame) / this.hitEffectFrame
+            const effectProgress = min(1, (frame - this.hitFrame) / this.hitEffectFrame)
             const radius = effectProgress * this.size * 5;
-               
-            fill(255, 255 * sin(effectProgress * PI))
-            rect(0, 0, width, height)
+
             fill(255, 0, 0)
             for (let angle = 0; angle < TAU; angle += PI/6) {
                 square(this.x - this.size / 2 + radius * cos(angle), 
@@ -99,12 +97,71 @@ class Bullet {
     }
 }
 
+class ToWhiteEffect{
+    constructor (){
+        this.flashFrame = 20
+        this.frame = this.flashFrame + 1
+        this.onflashMax = () => {       
+        }
+    }
+    start(onflashMax){
+        this.onflashMax = onflashMax
+        this.frame = 0
+    }
+    onTask(){
+        this.frame++
+
+        if(this.frame == this.flashFrame){
+            this.onflashMax()
+        }
+    }
+
+    onDraw(){
+        if(this.frame > this.flashFrame) return
+
+        let alpha = 255 * sin(this.frame / this.flashFrame * PI / 2)
+
+        background(255, alpha)
+    }
+}
+
+class ToBlackEffect{
+    constructor (){
+        this.flashFrame = 20
+        this.frame = this.flashFrame + 1
+        this.onflashMin = () => {       
+        }
+    }
+    start(onflashMin){
+        this.onflashMin = onflashMin
+        this.frame = 0
+    }
+    onTask(){
+        this.frame++
+
+        if(this.frame == this.flashFrame){
+            this.onflashMin()
+        }
+    }
+    onDraw(){
+        if(this.frame > this.flashFrame) return
+
+        background(255, 255 * sin(PI / 2 + this.frame / this.flashFrame * PI / 2))
+    }
+}
+
 let player
 
 let keyMap = new Map()
 let bulletList = []
 
 let frame = 0
+
+let restartRequired = false
+let allowAttack = true
+
+const toWhiteEffect = new ToWhiteEffect()
+const toBlackEffect = new ToBlackEffect()
 
 function setup() {
     createCanvas(500, 500)
@@ -119,6 +176,15 @@ function draw() {
 
 function doTask(){
     player.onTask()
+
+    if(player.isDead() && !restartRequired){
+        restartRequired = true
+
+        toWhiteEffect.start(() => {
+            restart()
+        })
+    }
+
     bulletList.forEach((a, b, c) =>{a.move()})
 
     if(player.x < 0) player.x = 0
@@ -148,9 +214,10 @@ function doTask(){
         }
     }
 
-    frame++
+    toWhiteEffect.onTask()
+    toBlackEffect.onTask()
 
-    if(player.isDead()) restart()
+    frame++
 }
 
 function render(){
@@ -158,6 +225,9 @@ function render(){
 
     player.onDraw()
     bulletList.forEach((a, b, c) =>{a.onDraw()})
+
+    toWhiteEffect.onDraw()
+    toBlackEffect.onDraw()
 }
 
 function restart(){
@@ -169,11 +239,15 @@ function restart(){
     keyMap.set(DOWN_ARROW, false)
     keyMap.set(LEFT_ARROW, false)
     keyMap.set(RIGHT_ARROW, false)
-    keyMap.set(82, false)
+
+    restartRequired = false
+    allowAttack = false
 
     frame = 0
 
     bulletList = []
+
+    toBlackEffect.start(()=>{allowAttack = false})
 }
 
 function keyPressed(){
