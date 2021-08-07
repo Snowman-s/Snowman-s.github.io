@@ -156,6 +156,40 @@ class ToBlackEffect{
     }
 }
 
+class BulletHell1 {
+    constructor(){
+        this.frame = 0
+    }
+
+    start(){
+        this.frame = 0
+    }
+
+    onTask(){
+        if(this.frame % 30 == 0){
+            for (let angle = this.frame; angle < this.frame + TAU; angle += PI / 5) {
+                let bullet = new Bullet()
+                bullet.angle = angle; bullet.speed = 2; bullet.size = 20;
+                bullet.x = stgAreaWidth / 2 
+                bullet.y = stgAreaHeight / 2
+                bulletList.push(bullet)
+            }
+        }
+
+        if(this.frame % 40 == 0){
+            for (let angle = this.frame; angle < this.frame + TAU; angle += PI / 10) {
+                let bullet = new Bullet()
+                bullet.angle = angle; bullet.speed = 5; bullet.size = 5;
+                bullet.x = stgAreaWidth / 2 
+                bullet.y = stgAreaHeight / 2
+                bulletList.push(bullet)
+            }
+        }
+    
+        this.frame++
+    }
+}
+
 let player
 
 let keyMap = new Map()
@@ -168,6 +202,8 @@ let allowAttack = true
 
 const toWhiteEffect = new ToWhiteEffect()
 const toBlackEffect = new ToBlackEffect()
+
+let bulletHell = new BulletHell1()
 
 function setup() {
     createCanvas(500, 500)
@@ -212,15 +248,7 @@ function doTask(){
         player.hit()
     }
 
-    if(frameCount % 60 == 0){
-        for (let angle = 0; angle < TAU; angle+=PI/6) {
-            let bullet = new Bullet()
-            bullet.angle = angle; bullet.speed = 5; bullet.size = 5;
-            bullet.x = stgAreaWidth / 2 
-            bullet.y = stgAreaHeight / 2
-            bulletList.push(bullet)
-        }
-    }
+    if(allowAttack) bulletHell.onTask()
 
     toWhiteEffect.onTask()
     toBlackEffect.onTask()
@@ -255,7 +283,10 @@ function restart(){
 
     bulletList = []
 
-    toBlackEffect.start(()=>{allowAttack = false})
+    toBlackEffect.start(()=>{allowAttack = true})
+
+    bulletHell = new BulletHell1()
+    bulletHell.start()
 }
 
 function keyPressed(){
