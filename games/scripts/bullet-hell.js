@@ -206,7 +206,7 @@ const toBlackEffect = new ToBlackEffect()
 let bulletHell = new BulletHell1()
 
 function setup() {
-    createCanvas(500, 500)
+    createCanvas(900, 500)
 
     restart()
 }
@@ -264,6 +264,24 @@ function render(){
 
     toWhiteEffect.onDraw()
     toBlackEffect.onDraw()
+
+    push()
+    stroke(255)
+    fill(0)
+    rect(stgAreaWidth, 0, width - stgAreaWidth, height)
+    textSize(20)
+    fill(255)
+    const message = [
+        "遊び方：",
+        "　弾をかわせ！当たるな！",
+        "操作方法：",
+        "　↑↓←→ (矢印キー)：プレイヤーの移動"
+    ]
+    for (let index = 0; index < message.length; index++) {
+        const element = message[index];
+        text(element, stgAreaWidth, 25 * (index + 1))    
+    }
+    pop()
 }
 
 function restart(){
