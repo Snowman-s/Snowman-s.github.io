@@ -156,13 +156,39 @@ class ToBlackEffect{
     }
 }
 
+class NullBulletHell {
+    constructor(){
+    }
+
+    start(){
+    }
+
+    onTask(){
+        
+    }
+
+    remainSeconds(){
+        return 0
+    }
+
+    isTimeOver(){
+        return true
+    }
+    
+    isNull(){
+        return true
+    }
+}
+
 class BulletHell1 {
     constructor(){
         this.frame = 0
+        this.remainFrame = 200
     }
 
     start(){
         this.frame = 0
+        this.remainFrame = 200
     }
 
     onTask(){
@@ -187,16 +213,31 @@ class BulletHell1 {
         }
     
         this.frame++
+        this.remainFrame--
+    }
+
+    remainSeconds(){
+        return int(this.remainFrame / 60)
+    }
+
+    isTimeOver(){
+        return this.remainFrame <= 0
+    }
+
+    isNull(){
+        return false
     }
 }
 
 class BulletHell2 {
     constructor(){
         this.frame = 0
+        this.remainFrame = 200
     }
 
     start(){
         this.frame = 0
+        this.remainFrame = 200
     }
 
     onTask(){
@@ -221,6 +262,36 @@ class BulletHell2 {
         }
     
         this.frame++
+        this.remainFrame--
+    }
+    
+    remainSeconds(){
+        return int(this.remainFrame / 60)
+    }
+
+    isTimeOver(){
+        return this.remainFrame <= 0
+    }
+    
+    isNull(){
+        return false
+    }
+}
+
+class LinearBulletHellScheduler{
+    constructor(){
+        this.bulletHellList = [
+            () => {return new BulletHell1},
+            () => {return new BulletHell2}
+        ]
+    }
+
+    nextBulletHell(){
+        if(this.bulletHellList.length == 0) return new NullBulletHell()
+
+        let createFunc = this.bulletHellList.pop()
+
+        return createFunc()
     }
 }
 
@@ -237,11 +308,13 @@ let allowAttack = true
 const toWhiteEffect = new ToWhiteEffect()
 const toBlackEffect = new ToBlackEffect()
 
-let bulletHell = new BulletHell1()
+let bulletHell
+let bulletHellScheduler
 
 function setup() {
     createCanvas(900, 500)
-
+    bulletHellScheduler = new LinearBulletHellScheduler()
+    bulletHell = bulletHellScheduler.nextBulletHell()
     restart()
 }
 
@@ -252,6 +325,15 @@ function draw() {
 
 function doTask(){
     player.onTask()
+
+    if(bulletHell.isNull() && !restartRequired){
+        restartRequired = true
+        bulletHellScheduler = new LinearBulletHellScheduler()
+        bulletHell = bulletHellScheduler.nextBulletHell()
+        toWhiteEffect.start(() => {
+            restart()
+        })
+    }
 
     if(player.isDead() && !restartRequired){
         restartRequired = true
@@ -282,7 +364,14 @@ function doTask(){
         player.hit()
     }
 
-    if(allowAttack) bulletHell.onTask()
+    if(allowAttack) {
+        if(!bulletHell.isTimeOver()){
+            bulletHell.onTask()
+        } else {
+            bulletHell = bulletHellScheduler.nextBulletHell()
+            bulletHell.start()
+        }
+    }
 
     toWhiteEffect.onTask()
     toBlackEffect.onTask()
@@ -296,23 +385,32 @@ function render(){
     player.onDraw()
     bulletList.forEach((a, b, c) =>{a.onDraw()})
 
+    //時間制限
+    push()
+    fill(255)
+    stroke(255)
+    textSize(20)
+    text(bulletHell.remainSeconds(), stgAreaWidth - 25, 25)    
+    pop()
+
     toWhiteEffect.onDraw()
     toBlackEffect.onDraw()
 
+    //右のメッセージ欄
     push()
     stroke(255)
     fill(0)
     rect(stgAreaWidth, 0, width - stgAreaWidth, height)
     textSize(20)
     fill(255)
-    const message = [
+    const messages = [
         "遊び方：",
         "　弾をかわせ！当たるな！",
         "操作方法：",
         "　↑↓←→ (矢印キー)：プレイヤーの移動"
     ]
-    for (let index = 0; index < message.length; index++) {
-        const element = message[index];
+    for (let index = 0; index < messages.length; index++) {
+        const element = messages[index];
         text(element, stgAreaWidth, 25 * (index + 1))    
     }
     pop()
