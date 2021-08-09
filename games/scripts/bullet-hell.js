@@ -190,6 +190,40 @@ class BulletHell1 {
     }
 }
 
+class BulletHell2 {
+    constructor(){
+        this.frame = 0
+    }
+
+    start(){
+        this.frame = 0
+    }
+
+    onTask(){
+        if(this.frame % 80 == 0){
+            for (let angle = this.frame; angle < this.frame + TAU; angle += PI / 6) {
+                let bullet = new Bullet()
+                bullet.angle = angle; bullet.speed = 5; bullet.size = 40;
+                bullet.x = stgAreaWidth / 2 
+                bullet.y = stgAreaHeight / 2
+                bulletList.push(bullet)
+            }
+        }
+
+        if(this.frame % 50 == 0){
+            for (let angle = this.frame; angle < this.frame + TAU; angle += PI / 10) {
+                let bullet = new Bullet()
+                bullet.angle = angle; bullet.speed = 2; bullet.size = 5;
+                bullet.x = stgAreaWidth / 2 
+                bullet.y = stgAreaHeight / 2
+                bulletList.push(bullet)
+            }
+        }
+    
+        this.frame++
+    }
+}
+
 let player
 
 let keyMap = new Map()
@@ -303,7 +337,6 @@ function restart(){
 
     toBlackEffect.start(()=>{allowAttack = true})
 
-    bulletHell = new BulletHell1()
     bulletHell.start()
 }
 
