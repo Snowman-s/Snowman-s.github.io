@@ -172,7 +172,7 @@ class NullBulletHell {
     }
 
     isTimeOver(){
-        return true
+        return false
     }
     
     isNull(){
@@ -183,12 +183,12 @@ class NullBulletHell {
 class BulletHell1 {
     constructor(){
         this.frame = 0
-        this.remainFrame = 200
+        this.remainFrame = 0
     }
 
     start(){
         this.frame = 0
-        this.remainFrame = 200
+        this.remainFrame = 500
     }
 
     onTask(){
@@ -232,12 +232,12 @@ class BulletHell1 {
 class BulletHell2 {
     constructor(){
         this.frame = 0
-        this.remainFrame = 200
+        this.remainFrame = 0
     }
 
     start(){
         this.frame = 0
-        this.remainFrame = 200
+        this.remainFrame = 500
     }
 
     onTask(){
@@ -328,9 +328,9 @@ function doTask(){
 
     if(bulletHell.isNull() && !restartRequired){
         restartRequired = true
-        bulletHellScheduler = new LinearBulletHellScheduler()
-        bulletHell = bulletHellScheduler.nextBulletHell()
         toWhiteEffect.start(() => {
+            bulletHellScheduler = new LinearBulletHellScheduler()
+            bulletHell = bulletHellScheduler.nextBulletHell()
             restart()
         })
     }
