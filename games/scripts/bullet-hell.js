@@ -65,15 +65,15 @@ class Player {
         noStroke()
         if(! this.isDamaged()){
             fill(255, 0, 0)
-            square(this.x - this.size / 2, this.y - this.size / 2, this.size)
+            circle(this.x, this.y, this.size)
         } else {     
             const effectProgress = min(1, (frame - this.hitFrame) / this.hitEffectFrame)
             const radius = effectProgress * this.size * 5;
 
             fill(255, 0, 0)
             for (let angle = 0; angle < TAU; angle += PI/6) {
-                square(this.x - this.size / 2 + radius * cos(angle), 
-                    this.y - this.size / 2 + radius * sin(angle), 
+                circle(this.x + radius * cos(angle), 
+                    this.y + radius * sin(angle), 
                     this.size * (1 - effectProgress))
             }
         }
@@ -98,7 +98,7 @@ class Bullet {
     onDraw(){
         push()
         noStroke(255)
-        square(this.x - this.size / 2, this.y - this.size / 2, this.size)
+        circle(this.x, this.y, this.size)
         pop()
     }
 }
@@ -275,7 +275,7 @@ function doTask(){
 
     let hitBullet = bulletList.filter((a, b, c) => {
         let sizeAve = a.size / 2 + player.size / 2
-        return abs(a.x - player.x) < sizeAve && abs(a.y - player.y) < sizeAve
+        return dist(a.x, a.y, player.x, player.y) < sizeAve
     })
 
     if(hitBullet.length > 0){
