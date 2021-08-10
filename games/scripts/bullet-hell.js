@@ -156,8 +156,62 @@ class ToBlackEffect{
     }
 }
 
-class NullBulletHell {
+//interface
+class BulletHell {
+    start(){
+    }
+
+    onTask(){
+        
+    }
+
+    remainSeconds(){
+    }
+
+    isTimeOver(){
+    }
+    
+    isNull(){
+    }
+}
+
+//BulletHellの一般的な抽象実装
+class BulletHellImpl extends BulletHell{
+    constructor(activeFrame){
+        super()
+        this.activeFrame = activeFrame
+        this.remainFrame = 0
+        this.frame = 0
+    }
+
+    start(){
+        this.remainFrame = this.activeFrame
+        this.frame = 0
+    }
+
+    onTask(){
+        this._onBulletHellTask()
+        
+        this.frame++
+        this.remainFrame--
+    }
+
+    remainSeconds(){
+        return int(this.remainFrame / 60)
+    }
+
+    isTimeOver(){
+        return this.remainFrame <= 0
+    }
+
+    isNull(){
+        return false
+    }
+}
+
+class NullBulletHell extends BulletHell{
     constructor(){
+        super()
     }
 
     start(){
@@ -180,18 +234,12 @@ class NullBulletHell {
     }
 }
 
-class BulletHell1 {
+class BulletHell1 extends BulletHellImpl{
     constructor(){
-        this.frame = 0
-        this.remainFrame = 0
+        super(500)
     }
 
-    start(){
-        this.frame = 0
-        this.remainFrame = 500
-    }
-
-    onTask(){
+    _onBulletHellTask(){
         if(this.frame % 30 == 0){
             for (let angle = this.frame; angle < this.frame + TAU; angle += PI / 5) {
                 let bullet = new Bullet()
@@ -211,36 +259,15 @@ class BulletHell1 {
                 bulletList.push(bullet)
             }
         }
-    
-        this.frame++
-        this.remainFrame--
-    }
-
-    remainSeconds(){
-        return int(this.remainFrame / 60)
-    }
-
-    isTimeOver(){
-        return this.remainFrame <= 0
-    }
-
-    isNull(){
-        return false
     }
 }
 
-class BulletHell2 {
+class BulletHell2 extends BulletHellImpl{
     constructor(){
-        this.frame = 0
-        this.remainFrame = 0
+        super(500)
     }
 
-    start(){
-        this.frame = 0
-        this.remainFrame = 500
-    }
-
-    onTask(){
+    _onBulletHellTask(){
         if(this.frame % 80 == 0){
             for (let angle = this.frame; angle < this.frame + TAU; angle += PI / 6) {
                 let bullet = new Bullet()
@@ -260,21 +287,6 @@ class BulletHell2 {
                 bulletList.push(bullet)
             }
         }
-    
-        this.frame++
-        this.remainFrame--
-    }
-    
-    remainSeconds(){
-        return int(this.remainFrame / 60)
-    }
-
-    isTimeOver(){
-        return this.remainFrame <= 0
-    }
-    
-    isNull(){
-        return false
     }
 }
 
