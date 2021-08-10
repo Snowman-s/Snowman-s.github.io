@@ -182,6 +182,8 @@ class BulletHellImpl extends BulletHell{
         this.activeFrame = activeFrame
         this.remainFrame = 0
         this.frame = 0
+
+        this.marginFrame = 60
     }
 
     start(){
@@ -190,9 +192,12 @@ class BulletHellImpl extends BulletHell{
     }
 
     onTask(){
-        this._onBulletHellTask()
-        
         this.frame++
+
+        if(this.frame < this.marginFrame) return
+
+        if(this.remainFrame > 0) this._onBulletHellTask()
+
         this.remainFrame--
     }
 
@@ -201,7 +206,7 @@ class BulletHellImpl extends BulletHell{
     }
 
     isEnded(){
-        return this.remainFrame <= 0
+        return this.remainFrame <= -this.marginFrame
     }
 
     isNull(){
