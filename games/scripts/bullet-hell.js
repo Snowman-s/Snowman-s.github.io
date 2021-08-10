@@ -168,7 +168,7 @@ class BulletHell {
     remainSeconds(){
     }
 
-    isTimeOver(){
+    isEnded(){
     }
     
     isNull(){
@@ -200,7 +200,7 @@ class BulletHellImpl extends BulletHell{
         return int(this.remainFrame / 60)
     }
 
-    isTimeOver(){
+    isEnded(){
         return this.remainFrame <= 0
     }
 
@@ -225,7 +225,7 @@ class NullBulletHell extends BulletHell{
         return 0
     }
 
-    isTimeOver(){
+    isEnded(){
         return false
     }
     
@@ -377,7 +377,7 @@ function doTask(){
     }
 
     if(allowAttack) {
-        if(!bulletHell.isTimeOver()){
+        if(!bulletHell.isEnded()){
             bulletHell.onTask()
         } else {
             bulletHell = bulletHellScheduler.nextBulletHell()
