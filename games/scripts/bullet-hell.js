@@ -1,6 +1,10 @@
 const stgAreaWidth = 500
 const stgAreaHeight = 500
 
+const progressGaugeAreaWidth = 50
+
+const messageAreaWidth = 400
+
 const bulletLiveWidthMargin = 100
 const bulletLiveHeightMargin = 100
 
@@ -165,7 +169,14 @@ class BulletHell {
         
     }
 
+    maxSeconds(){
+
+    }
+
     remainSeconds(){
+    }
+
+    getProgress(){   
     }
 
     isEnded(){
@@ -186,6 +197,10 @@ class BulletHellImpl extends BulletHell{
         this.marginFrame = 60
     }
 
+    maxSeconds(){
+        return int(this.activeFrame / 60)
+    }
+
     start(){
         this.remainFrame = this.activeFrame
         this.frame = 0
@@ -203,6 +218,10 @@ class BulletHellImpl extends BulletHell{
 
     remainSeconds(){
         return int(this.remainFrame / 60)
+    }
+
+    getProgress(){
+        return min(1, 1 - this.remainFrame / this.activeFrame)
     }
 
     isEnded(){
@@ -226,7 +245,15 @@ class NullBulletHell extends BulletHell{
         
     }
 
+    maxSeconds(){
+        return 0
+    }
+
     remainSeconds(){
+        return 0
+    }
+
+    getProgress(){
         return 0
     }
 
@@ -329,7 +356,7 @@ let bulletHell
 let bulletHellScheduler
 
 function setup() {
-    createCanvas(900, 500)
+    createCanvas(stgAreaWidth + progressGaugeAreaWidth + messageAreaWidth, stgAreaHeight)
     bulletHellScheduler = new LinearBulletHellScheduler()
     bulletHell = bulletHellScheduler.nextBulletHell()
     restart()
@@ -413,11 +440,25 @@ function render(){
     toWhiteEffect.onDraw()
     toBlackEffect.onDraw()
 
+    //中の進行ゲージ
+    push()
+    stroke(255)
+    fill(0)
+    rect(stgAreaWidth, 0, progressGaugeAreaWidth, height)
+    strokeWeight(5)
+    line(stgAreaWidth + progressGaugeAreaWidth / 2, height / 20, 
+        stgAreaWidth + progressGaugeAreaWidth / 2, height - height / 20)
+    stroke(255, 0, 0)
+    const progressHeight = (1 - bulletHell.getProgress()) * height * 9 / 10  + height / 20
+    line(stgAreaWidth + progressGaugeAreaWidth / 10, progressHeight,
+        stgAreaWidth + progressGaugeAreaWidth - progressGaugeAreaWidth / 10, progressHeight)
+    pop()
+
     //右のメッセージ欄
     push()
     stroke(255)
     fill(0)
-    rect(stgAreaWidth, 0, width - stgAreaWidth, height)
+    rect(stgAreaWidth + progressGaugeAreaWidth, 0, messageAreaWidth, height)
     textSize(20)
     fill(255)
     const messages = [
@@ -428,7 +469,7 @@ function render(){
     ]
     for (let index = 0; index < messages.length; index++) {
         const element = messages[index];
-        text(element, stgAreaWidth, 25 * (index + 1))    
+        text(element, stgAreaWidth + progressGaugeAreaWidth, 25 * (index + 1))    
     }
     pop()
 }
