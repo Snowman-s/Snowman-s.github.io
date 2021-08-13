@@ -325,9 +325,12 @@ class BulletHell2 extends BulletHellImpl{
 class LinearBulletHellScheduler{
     constructor(){
         this.bulletHellList = [
+            () => {return new NullBulletHell},
             () => {return new BulletHell1},
             () => {return new BulletHell2}
         ]
+
+        this.maxAttackAmount = 2
     }
 
     nextBulletHell(){
@@ -336,6 +339,10 @@ class LinearBulletHellScheduler{
         let createFunc = this.bulletHellList.pop()
 
         return createFunc()
+    }
+
+    getProgress(){
+        return 1 - this.bulletHellList.length / this.maxAttackAmount
     }
 }
 
@@ -448,10 +455,14 @@ function render(){
     strokeWeight(5)
     line(stgAreaWidth + progressGaugeAreaWidth / 2, height / 20, 
         stgAreaWidth + progressGaugeAreaWidth / 2, height - height / 20)
+    const hellProgressHeight = (1 - bulletHell.getProgress()) * height * 9 / 10  + height / 20
+    const scheduleProgressHeight = (1 - bulletHellScheduler.getProgress()) * height * 9 / 10  + height / 20
     stroke(255, 0, 0)
-    const progressHeight = (1 - bulletHell.getProgress()) * height * 9 / 10  + height / 20
-    line(stgAreaWidth + progressGaugeAreaWidth / 10, progressHeight,
-        stgAreaWidth + progressGaugeAreaWidth - progressGaugeAreaWidth / 10, progressHeight)
+    line(stgAreaWidth + progressGaugeAreaWidth / 10, hellProgressHeight,
+        stgAreaWidth + progressGaugeAreaWidth - progressGaugeAreaWidth / 10, hellProgressHeight)
+    stroke(255, 255, 0)
+    line(stgAreaWidth + progressGaugeAreaWidth / 10, scheduleProgressHeight,
+        stgAreaWidth + progressGaugeAreaWidth - progressGaugeAreaWidth / 10, scheduleProgressHeight)
     pop()
 
     //右のメッセージ欄
