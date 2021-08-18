@@ -1,0 +1,27 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:snowesamosc.kotlinjsonparser.factory////PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.factory/index.html
+$dokka.location:snowesamosc.kotlinjsonparser.factory/JsonLiteralParser///PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.factory/-json-literal-parser/index.html
+$dokka.location:snowesamosc.kotlinjsonparser.factory/JsonLiteralParser/JsonLiteralParser/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.factory/-json-literal-parser/-json-literal-parser.html
+$dokka.location:snowesamosc.kotlinjsonparser.factory/JsonLiteralParser/parse/#kotlin.String/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.factory/-json-literal-parser/parse.html
+$dokka.location:snowesamosc.kotlinjsonparser.node////PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/index.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode///PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/index.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/asArray/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/as-array.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/asBoolean/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/as-boolean.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/asInt/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/as-int.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/asNumber/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/as-number.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/asText/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/as-text.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/find/#kotlin.String/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/find.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/get/#kotlin.String/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/get.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/isArray/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/is-array.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/isBoolean/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/is-boolean.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/isInt/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/is-int.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/isMissing/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/is-missing.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/isNull/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/is-null.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/isNumber/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/is-number.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/isObject/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/is-object.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/isText/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/is-text.html
+$dokka.location:snowesamosc.kotlinjsonparser.node/JsonNode/toString/#/PointingToDeclaration/-kotlin-java-parser/snowesamosc.kotlinjsonparser.node/-json-node/to-string.html
+snowesamosc.kotlinjsonparser.factory
+snowesamosc.kotlinjsonparser.node
+
